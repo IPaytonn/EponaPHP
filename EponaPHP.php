@@ -56,7 +56,7 @@ while(1) {
         if ($rawcmd[1] == "!cookie") {
             fputs($socket, "PRIVMSG ".$channel." :This guy gets a cookie --> ".$args."\n");
         }
-        if ($rawcmd[1] == "!date") {
+        if ($oneword[1] == "!date") {
             $date = date("m.d.y");
             fputs($socket, "PRIVMSG ".$channel." :DATE ".$date."\n");
         }
