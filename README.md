@@ -12,6 +12,15 @@ Instructions:
 
 4.) Use away.
 
+Commands:
+===
+!say "String" (No " needed.)
+!cookie
+!md5
+!sqrt
+!date
+(All require parameters after them, I'll fix that later.)
+
 ChangeLog:
 ===
 *v0.1 released!
