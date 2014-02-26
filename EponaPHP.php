@@ -11,10 +11,10 @@ No <br /> xD
 set_time_limit(0);
 //Pesky <br /> error, still works, though. :)
 error_reporting(0);
-$this->send = $this->_send; IDEK why..
+$this->send = $this->_send; //IDEK why..
 
 // Edit these settings
-$chan = "#MCPEBukkit"; //IRC Channel
+$chan = "#bots"; //IRC Channel
 $server = "irc.freenode.net"; //IRC server
 $port = 6667; //Port default: 6667
 $nick = "EponaPHP"; //Name that is displayed
