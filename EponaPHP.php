@@ -11,7 +11,6 @@ No <br /> xD
 set_time_limit(0);
 //Pesky <br /> error, still works, though. :)
 error_reporting(0);
-$this->send = $this->_send; //IDEK why..
 
 // Edit these settings
 $chan = "#bots"; //IRC Channel
@@ -62,7 +61,7 @@ while(1) {
             fputs($socket, "PRIVMSG ".$channel." :DATE ".$date."\n");
         }
         if ($rawcmd[1] == "!stop") {
-            $this->send("QUIT");
+            $this->_send("QUIT");
         }
     }
 }
