@@ -61,7 +61,7 @@ while(1) {
             fputs($socket, "PRIVMSG ".$channel." :DATE ".$date."\n");
         }
         if ($rawcmd[1] == "!stop") {
-            $this->_send("QUIT");
+            $this->_send("QUIT"); // $this->_send is predefined by IRC
         }
     }
 }
