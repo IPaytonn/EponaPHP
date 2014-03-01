@@ -17,6 +17,7 @@ $chan = "#bots"; //IRC Channel
 $server = "irc.freenode.net"; //IRC server
 $port = 6667; //Port default: 6667
 $nick = "EponaPHP"; //Name that is displayed
+$reason = "This is the default quit message"; //Please set quit reason
 
 $socket = fsockopen("$server", $port);
 fputs($socket,"USER $nick $nick $nick $nick :$nick\n");
@@ -48,20 +49,20 @@ while(1) {
                 fputs($socket, "PRIVMSG ".$channel." :".$args." \n");
             }
         if ($rawcmd[1] == "!md5") {
-            fputs($socket, "PRIVMSG ".$channel." :MD5 ".md5($args)."\n");
+            fputs($socket, "PRIVMSG ".$channel." :Here is the MD5 hash of $args ".md5($args)."\n");
         }
         if ($rawcmd[1] == "!sqrt") {
-            fputs($socket, "PRIVMSG ".$channel." :SQRT ".round(sqrt($args), 3)."\n");
+            fputs($socket, "PRIVMSG ".$channel." :The square root of $args is ".round(sqrt($args), 3)."\n");
         }
         if ($rawcmd[1] == "!cookie") {
-            fputs($socket, "PRIVMSG ".$channel." :This guy gets a cookie --> ".$args."\n");
+            fputs($socket, "PRIVMSG ".$channel." :This guy/girl gets a cookie --> ".$args."\n");
         }
         if ($rawcmd[1] == "!date") {
             $date = date("m.d.y");
-            fputs($socket, "PRIVMSG ".$channel." :DATE ".$date."\n");
+            fputs($socket, "PRIVMSG ".$channel." :Today is ".$date."\n");
         }
         if ($rawcmd[1] == "!stop") {
-            $this->_send("QUIT"); // $this->_send is predefined by IRC
+            $this->_send("QUIT", $reason); // $this->_send is predefined by IRC
         }
     }
 }
