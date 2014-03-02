@@ -64,6 +64,9 @@ while(1) {
         if ($rawcmd[1] == "!stop") {
             $this->_send("QUIT", $reason); // $this->_send is predefined by IRC
         }
+        if ($rawcmd[1] == "!nick") {
+            fputs($socket, "NICK $args\n");
+        }
     }
 }
 //dont end off the script, it needs to run until MinTTY is closed.
