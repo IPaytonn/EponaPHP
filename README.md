@@ -14,11 +14,12 @@ Instructions:
 
 Commands:
 ===
-!say "String" (No " needed.)
-!cookie
-!md5
-!sqrt
-!date
+<li>!say "String" (No " needed.)</li>
+<li>!cookie</li>
+<li>!md5</li>
+<li>!sqrt</li>
+<li>!date</li>
+<li>!title</li>
 (All require parameters after them, I'll fix that later.)
 
 ChangeLog:
