@@ -67,6 +67,10 @@ while(1) {
         if ($rawcmd[1] == "!nick") {
             fputs($socket, "NICK $args\n");
         }
+        if ($rawcmd[1] == "!title") {
+            preg_match("/\<title\>(.*)\<\/title\>/i", file_get_contents(trim($args)), $t);
+            fputs($socket, "PRIVMSG ".$channel." :$t[1] \n");
+        }
     }
 }
 //dont end off the script, it needs to run until MinTTY is closed.
