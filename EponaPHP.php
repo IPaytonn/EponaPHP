@@ -31,7 +31,7 @@ while(1) {
 
             $ex = explode(' ', $data);
         $rawcmd = explode(':', $ex[3]);
-        $oneword = explode('<br />', $rawcmd);
+        $oneword = explode(' ', $rawcmd);
             $channel = $ex[2];
         $nicka = explode('@', $ex[0]);
         $nickb = explode('!', $nicka[0]);
