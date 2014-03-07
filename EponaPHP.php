@@ -17,11 +17,13 @@ $chan = "#bots"; //IRC Channel
 $server = "irc.freenode.net"; //IRC server
 $port = 6667; //Port default: 6667
 $nick = "EponaPHP"; //Name that is displayed
+$password = ""; //Only used if the bot is supposed to authenticate to the server
 $reason = "This is the default quit message"; //Please set quit reason
 
 $socket = fsockopen("$server", $port);
 fputs($socket,"USER $nick $nick $nick $nick :$nick\n");
 fputs($socket,"NICK $nick\n");
+fputs($socket,"PRIVMSG nickserv :identify $password")
 fputs($socket,"JOIN ".$chan."\n");
 
 while(1) {
