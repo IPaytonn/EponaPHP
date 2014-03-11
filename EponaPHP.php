@@ -24,7 +24,7 @@ $socket = fsockopen("$server", $port);
 fputs($socket,"USER $nick $nick $nick $nick :$nick\n");
 fputs($socket,"NICK $nick\n");
 if (isset($password)) {
-    fputs($socket, "PASS".$password."\n")
+    fputs($socket, "PASS".$password."\n");
 }
 fputs($socket,"JOIN ".$chan."\n");
 
