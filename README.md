@@ -22,6 +22,13 @@ Instructions For Linux:
 
 4.) cd to the directory you installed EponaPHP in and do: <code>php EponaPHP.php</code>
 
+Instructions for Mac:
+===
+You should already have php-cli installed, if not see php.net
+1.) In the terminal, cd to the directory in which you installed EponaPHP in.
+
+2.) run <code>php EponaPHP.php</code> in the terminal.
+
 Commands:
 ===
 <li>!say "String" (No " needed.)</li>
@@ -37,7 +44,3 @@ Commands:
 <li>!title</li>
 
 (All require parameters after them, I'll fix that later.)
-
-ChangeLog:
-===
-*v0.1 released!
