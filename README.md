@@ -25,6 +25,7 @@ Instructions For Linux:
 Instructions for Mac:
 ===
 You should already have php-cli installed, if not see php.net
+
 1.) In the terminal, cd to the directory in which you installed EponaPHP in.
 
 2.) run <code>php EponaPHP.php</code> in the terminal.
