@@ -52,6 +52,9 @@ while(1) {
             if ($rawcmd[1] == "!say") {
                 fputs($socket, "PRIVMSG ".$channel." :".$args." \n");
             }
+            if ($rawcmd[1] == "!help") {
+                fputs($socket, "PRIVMSG ".$channel." :List of available commands: md5, sqrt, cookie, date, title\n");
+            }
         if ($rawcmd[1] == "!md5") {
             fputs($socket, "PRIVMSG ".$channel." :Here is the MD5 hash of $args ".md5($args)."\n");
         }
@@ -65,10 +68,10 @@ while(1) {
             $date = date("m.d.y");
             fputs($socket, "PRIVMSG ".$channel." :Today is ".$date."\n");
         }
-        if ($rawcmd[1] == "!stop") {
+        if ($rawcmd[1] == "☼stop") {
             $this->send_data("QUIT", $reason); // $this->send_data is predefined by IRC
         }
-        if ($rawcmd[1] == "!nick") {
+        if ($rawcmd[1] == "☼nick") {
             fputs($socket, "NICK $args\n");
         }
         if ($rawcmd[1] == "!title") {
