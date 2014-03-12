@@ -1,80 +1,122 @@
 <?php
 
-/*
-Soon:
-Plugin Support for commands.
-No <br /> xD
-
-*/
-
-//Stops the script from after periods of time.
-set_time_limit(0);
-//Pesky <br /> error, still works, though. :)
 error_reporting(0);
 
-// Edit these settings
-$chan = "#bots"; //IRC Channel
-$server = "irc.freenode.net"; //IRC server
-$port = 6667; //Port default: 6667
-$nick = "EponaPHP"; //Name that is displayed
-$password = "username:password"; //Only used if the bot is supposed to authenticate to the server
-$reason = "This is the default quit message"; //Please set quit reason
+class EponaPHP {
 
-$socket = fsockopen("$server", $port);
-fputs($socket,"USER $nick $nick $nick $nick :$nick\n");
-fputs($socket,"NICK $nick\n");
-if (isset($password)) {
-    fputs($socket, "PASS".$password."\n");
+function EponaPHP() {
+$this->Server = "irc.freenode.net";
+$this->FirstChannel = "#bots";
+$this->ConnectPassword = "username:pass";
+$this->BotNick = "EponaPHP";
+$this->Port = 6667;
+$this->TriggerChar = "!";
 }
-fputs($socket,"JOIN ".$chan."\n");
 
-while(1) {
-    while($data = fgets($socket)) {
-            echo nl2br($data);
-            flush();
+function SendRaw($input) {
+echo $input.PHP_EOL;
+fwrite($this->Socket,sprintf("%s\r\n",$input));
+}
 
-            $ex = explode(' ', $data);
-        $rawcmd = explode(':', $ex[3]);
-        $oneword = explode(' ', $rawcmd);
-            $channel = $ex[2];
-        $nicka = explode('@', $ex[0]);
-        $nickb = explode('!', $nicka[0]);
-        $nickc = explode(':', $nickb[0]);
+function SendMsg($channel,$input) {
+fwrite($this->Socket,sprintf("PRIVMSG %s :%s\r\n",$channel,$input));
+}
 
-        $host = $nicka[1];
-        $nick = $nickc[1];
-            if($ex[0] == "PING"){
-                fputs($socket, "PONG ".$ex[1]."\n");
-            }
+function SendNtc($channel,$input) {
+fwrite($this->Socket,sprintf("NOTICE %s :%s\r\n",$channel,$input));
+}
 
-        $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ' '; }
+function Idle() {
+$this->SendRaw("PASS {$this->ConnectPassword}");
+$this->SendRaw("USER {$this->BotNick} {$this->BotNick} {$this->BotNick} :EponaPHP IRC bot");
+$this->SendRaw("NICK {$this->BotNick}");
+while (!feof($this->Socket)) {
+$this->Get = fgets($this->Socket, 4096);
+echo $this->Get.PHP_EOL;
+$line = explode(" ", $this->Get);
+$source = substr($line[0], 1);
+$dsource = $line[0];
+$sourceNick = strstr($source, "!", 1);
+$sourceUser = substr(strstr(strstr($source, "@", 1), "!"), 1);
+$sourceHost = substr(strstr($source, "@"), 1);
+$cmd = $line[1];
+$target = $line[2];
+$lastParameter = trim(substr(strstr($this->Get, " :"), 2));
+switch (strtoupper($cmd)) {
+case "PRIVMSG":
+$this->Privmsg($sourceNick, $sourceUser, $sourceHost, $target, $lastParameter);
+break;
+case "PONG":
+break;
+case "MODE":
+$this->SendRaw("JOIN {$this->FirstChannel}");
+break;
+default:
 
-            if ($rawcmd[1] == "!say") {
-                fputs($socket, "PRIVMSG ".$channel." :".$args." \n");
-            }
-        if ($rawcmd[1] == "!md5") {
-            fputs($socket, "PRIVMSG ".$channel." :Here is the MD5 hash of $args ".md5($args)."\n");
-        }
-        if ($rawcmd[1] == "!sqrt") {
-            fputs($socket, "PRIVMSG ".$channel." :The square root of $args is ".round(sqrt($args), 3)."\n");
-        }
-        if ($rawcmd[1] == "!cookie") {
-            fputs($socket, "PRIVMSG ".$channel." :This guy/girl gets a cookie --> ".$args."\n");
-        }
-        if ($rawcmd[1] == "!date") {
-            $date = date("m.d.y");
-            fputs($socket, "PRIVMSG ".$channel." :Today is ".$date."\n");
-        }
-        if ($rawcmd[1] == "!stop") {
-            $this->send_data("QUIT", $reason); // $this->send_data is predefined by IRC
-        }
-        if ($rawcmd[1] == "!nick") {
-            fputs($socket, "NICK $args\n");
-        }
-        if ($rawcmd[1] == "!title") {
-            preg_match("/\<title\>(.*)\<\/title\>/i", file_get_contents(trim($args)), $t);
-            fputs($socket, "PRIVMSG ".$channel." :$t[1] \n");
-        }
+break;
+}
+switch (strtoupper($dsource)) {
+case "PING":
+$this->SendRaw("PONG {$cmd}");
+break;
+}
+}
+}
+
+function Privmsg($srcN, $srcU, $srcH, $target, $privmsg) {
+$cmdline = explode(" ", $privmsg, 2);
+$cmd = $cmdline[0];
+$args = $cmdline[1];
+switch (strtolower($cmd)) {
+case "!about":
+$this->SendMsg($target, "PHP Bot made by I_Is_Payton_ much thanks to j4jackj for help.");
+break;
+case "!md5":
+$this->SendMsg($target, sprintf("MD5 sum of input: %s", md5($cmdline[1])));
+break;
+case "!sha512":
+$this->SendMsg($target, sprintf("SHA512 sum of input: %s", hash("sha512", $cmdline[1])));
+break;
+case "!sha1":
+$this->SendMsg($target, sprintf("SHA512 sum of input: %s", sha1($cmdline[1])));
+break;
+case "!join":
+$this->SendNtc($srcN, sprintf("JOINING %s", $cmdline[1]));
+$this->SendRaw(sprintf("JOIN %s", $cmdline[1]));
+break;
+//case "!stop":
+//$this->SendMsg($target, sprintf("*EponaPHP OUT*"));
+//$this->SendRaw(sprintf("PART %s", $target));
+//break;
+case "!kill":
+$this->SendMsg($target, sprintf("\x01ACTION kills %s with %s arm\x01", $cmdline[1], $srcN));
+break;
+case '!define':
+if (($json = file_get_contents('http://api.duckduckgo.com/?q=' . urlencode($cmdline[1]) . '&format=json'))) {
+   if (($json = json_decode($json, true))) {
+        $this->SendMsg($target, $json['Definition']);
+    }else{
+    	$this->SendMsg($target, sprintf("Could not find a Definition."));
     }
 }
-//dont end off the script, it needs to run until MinTTY is closed.
+break;
+if ($cmd == "hi") {
+$this->SendMsg($target, sprintf("Hello, %s.", $srcN));
+}
+case "lol":
+$this->SendMsg($target, sprintf("haha"));
+break;
+}
+}
+
+function StartBot() {
+$this->Socket = fsockopen($this->Server, $this->Port);
+
+
+
+$this->Idle();
+}
+
+}
+$EponaPHP = new EponaPHP();
+$EponaPHP->StartBot();
